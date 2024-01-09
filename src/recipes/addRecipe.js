@@ -28,8 +28,8 @@ const schema = yup.object({
 const AddRecipe = () => {
     return (
         <div>
-            <Header />
-            
+            <Header page={'הוספת מתכון'} />
+            הוספת מתכון חמודמוד
         </div>
     )
 }

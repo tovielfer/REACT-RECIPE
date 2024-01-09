@@ -6,6 +6,7 @@ import * as yup from 'yup'
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'
 
 const schema = yup.object({
     userName: yup.string().required("זהו שדה חובה"),
@@ -14,55 +15,34 @@ const schema = yup.object({
 
 const Login = () => {
     const dispatch = useDispatch();
-    const user = useSelector(state => state?.user);
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
     });
     const navigate = useNavigate()
-    const onSubmit = data => {
-        axios.post('http://localhost:8080/api/user/login', { Username: data.userName, Password: data.password })
-            .then(x => {
-                dispatch({ type: "SET_USER", payload: x.data })
-                navigate(`/home`)
-
-            }).catch(err => {
-                alert("אחד הפרטים שהוזנו שגוי");
-                navigate('/')
-            })
+    const onSubmit = (data) => {
+        axios.post("http://localhost:8080/api/user/login", { Username: data.userName, Password: data.password }).then(x => {
+            dispatch({ type: "SET_USER", payload: x.data });
+            localStorage.setItem("user", x.data.Name);
+            navigate(`/home`);
+        }).catch(err => {
+            Swal.fire({
+                icon: "error",
+                title: "אופססס...",
+                text: err.response.data
+            });
+            
+            navigate('/');
+        })
     };
-    // const { fielsd, append, prepend, remove, swap, move, insert } = useFieldArray({
-    //     control, 
-    //     name: "login",
-    // });
 
     return (
-        /* // <Form onSubmit={handleSubmit(onSubmit)} style={{ maxWidth: '400px', margin: 'auto' }}>
-         //     <Form.Input  {...register("userName")}
-         //         icon='user'
-         //         iconPosition='left'
-         //         label='Username'
-         //         placeholder='Username'
-         //         name="userName"
-         //     />
-         //     <div>{errors.username?.message}</div>
- 
-         //     <Form.Input  {...register("password")}
-         //         icon='lock'
-         //         iconPosition='left'
-         //         label='Password'
-         //         type='password'
-         //         name="password"
-         //     />
-         //     <p>{errors.password?.message}</p>
-         //     <Button color="teal" content='Login' primary />
-         // </Form>*/
         <>
             <Form onSubmit={handleSubmit(onSubmit)} style={{ maxWidth: '400px', margin: 'auto' }}>
                 <input {...register("userName")} placeholder="שם משתמש" />
-                <p>{errors.userName?.message}</p>
+                <p style={{ color: "red" }}>{errors.userName?.message}</p>
 
                 <input {...register("password")} placeholder="סיסמא" />
-                <p>{errors.password?.message}</p>
+                <p style={{ color: "red" }}>{errors.password?.message}</p>
 
                 <Input type='submit' color="teal" />
             </Form>
