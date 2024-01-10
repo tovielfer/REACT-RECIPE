@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, Icon, Input, Message } from 'semantic-ui-react'
+import { Form, Icon, Input, Message } from 'semantic-ui-react'
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -32,7 +32,8 @@ const SignUp = () => {
                 dispatch({ type: "SET_USER", payload: x.data });
                 console.log("x");
                 console.log(x.data);
-                localStorage.setItem("user", x.data.Name);
+                localStorage.setItem("userName", x.data.Name);
+                localStorage.setItem("userId", x.data.Id);
                 navigate(`/home`);
             }).catch(err => {
                 console.log(err);

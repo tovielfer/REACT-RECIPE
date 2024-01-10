@@ -5,7 +5,6 @@ import Login from './user/Login';
 import SignUp from './user/SignUp';
 import Home from './Home';
 import Recipe from './recipes/Recipe';
-import Header from './Header';
 import 'react-hook-form';
 import AddRecipe from './recipes/addRecipe';
 import Recipes from './recipes/Recipes';

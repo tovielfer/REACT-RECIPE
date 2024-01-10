@@ -4,7 +4,7 @@ import { Button, Icon, Form, Input } from 'semantic-ui-react'
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from 'yup'
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 
@@ -22,7 +22,8 @@ const Login = () => {
     const onSubmit = (data) => {
         axios.post("http://localhost:8080/api/user/login", { Username: data.userName, Password: data.password }).then(x => {
             dispatch({ type: "SET_USER", payload: x.data });
-            localStorage.setItem("user", x.data.Name);
+            localStorage.setItem("userName", x.data.Name);
+            localStorage.setItem("userId", x.data.Id);
             navigate(`/home`);
         }).catch(err => {
             Swal.fire({

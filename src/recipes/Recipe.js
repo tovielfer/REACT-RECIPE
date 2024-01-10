@@ -1,14 +1,12 @@
-import { Button, ButtonContent, Card, CardContent, Header, Icon, Image, Segment, SegmentGroup, CardDescription, CardHeader } from "semantic-ui-react";
+import { Button, Card, CardContent, Icon, Image, CardDescription, CardHeader } from "semantic-ui-react";
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import axios from 'axios';
 import Swal from 'sweetalert2'
 
 const Recipe = ({ recipe }) => {
     const [categories, setCategories] = useState([]);
-    const navigate = useNavigate();
-    const user = useSelector(state => state.user);
+    const userid = localStorage.getItem("userId");
     const difficultyList = [{ Id: 1, Name: 'קל' }, { Id: 2, Name: 'בינוני' }, { Id: 3, Name: 'קשה' }]
 
     useEffect(() => {
@@ -28,7 +26,17 @@ const Recipe = ({ recipe }) => {
     }, []);
 
     const AddToCart = (product) => {
-        axios.post(`http://localhost:8080/api/bay`, { Name: product.Name, UserId: 2, Count: 1 })
+        axios.post(`http://localhost:8080/api/bay`, { Name: product, Count: 1, UserId: userid })
+            .then(() => {
+                Swal.fire({
+                    position: "top",
+                    icon: "success",
+                    title:  product+ "\n"+ "נוסף בהצלחה לרשימת הקניות שלך" ,
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            })
+            .catch(err => console.log(err.response))
     }
 
     return (
@@ -39,9 +47,9 @@ const Recipe = ({ recipe }) => {
                 <CardDescription>{recipe.Description}</CardDescription>
                 <br></br>
                 <b>רכיבים:</b>
-                {recipe.Ingrident.map((x, i) => <div style={{textAlign:"right"}} key={i}> <Button style={{marginLeft:"10px"}} inverted color='teal' circular icon='cart arrow down' onClick={() => AddToCart(x.Name)} />   {x.Count} {x.Type} {x.Name} </div>)}
+                {recipe.Ingrident.map((x, i) => <div style={{ textAlign: "right" }} key={i}> <Button style={{ marginLeft: "10px" }} inverted color='teal' circular icon='plus cart' onClick={() => AddToCart(x.Name)} />   {x.Count} {x.Type} {x.Name} </div>)}
                 <br></br>
-                <b>הוראות הכנה:</b> {recipe.Instructions.map((x, i) => <div style={{textAlign:"right"}}  key={i}> <Icon style={{marginLeft:"10px"}} color='teal'name="heart outline" /> {x}</div>)}
+                <b>הוראות הכנה:</b> {recipe.Instructions.map((x, i) => <div style={{ textAlign: "right" }} key={i}> <Icon style={{ margin: "10px" }} color='teal' name="heart outline" /> {x}</div>)}
 
             </CardContent>
             <CardContent extra>
@@ -59,9 +67,6 @@ const Recipe = ({ recipe }) => {
                 </span>
 
             </CardContent>
-            {/*   
-            רכיבים: {recipe.Ingrident.map((x, i) => <div key={i}> <button onClick={() => AddToCart(x.Name)}><Icon name='cart arrow down' /></button> {x.Count} {x.Type} {x.Name} </div>)}
-            הוראות הכנה: {recipe.Instructions.map((x, i) => <div key={i}>{x}</div>)} */}
         </Card>
     )
 }
