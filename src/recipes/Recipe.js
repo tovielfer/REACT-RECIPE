@@ -9,20 +9,11 @@ const Recipe = ({ recipe }) => {
     const userid = localStorage.getItem("userId");
     const difficultyList = [{ Id: 1, Name: 'קל' }, { Id: 2, Name: 'בינוני' }, { Id: 3, Name: 'קשה' }]
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get("http://localhost:8080/api/category");
-                setCategories(response.data);
-            } catch (err) {
-                Swal.fire({
-                    icon: "error",
-                    title: "אופסס....",
-                    text: err.response.data
-                });
-            }
-        };
-        fetchData();
+    useEffect(function () {
+        axios.get("http://localhost:8080/api/category").then((response) => {
+            setCategories(response.data);
+            console.log(userid);
+        }).catch(err => console.log(err))
     }, []);
 
     const AddToCart = (product) => {
@@ -31,7 +22,7 @@ const Recipe = ({ recipe }) => {
                 Swal.fire({
                     position: "top",
                     icon: "success",
-                    title:  product+ "\n"+ "נוסף בהצלחה לרשימת הקניות שלך" ,
+                    title: product + "\n" + "נוסף בהצלחה לרשימת הקניות שלך",
                     showConfirmButton: false,
                     timer: 2000
                 });
@@ -39,8 +30,40 @@ const Recipe = ({ recipe }) => {
             .catch(err => console.log(err.response))
     }
 
+    const deleteRecipe = () => {
+        Swal.fire({
+            title: " האם למחוק סופית את?",
+            text: recipe.Name + "אין אפשרות לשחזר",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            cancelButtonText: "ביטול",
+            confirmButtonText: "כן, אני רוצה למחוק!"
+        }).then(result => {
+            if (result.isConfirmed) {
+                axios.post(`http://localhost:8080/api/recipe/delete/${recipe.Id}`)
+                    .then((response) => {
+                        console.log(response.data);
+                        Swal.fire({
+                            position: "top",
+                            icon: "success",
+                            title: recipe.Name + "נמחק בהצלחה!",
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    })
+                    .catch(err => console.log(err))
+            }
+        })
+    }
     return (
-        <Card color='teal' style={{ width: "25%" }} כ>
+
+        <Card color='teal' style={{ width: "20%" }} >
+            {userid == recipe.UserId && <>
+                <Button style={{ position: "absolute", top: 10, left: 10, zIndex: 1, width: 50 }} inverted color='grey' icon='edit' onClick={() => { }} />
+                <Button style={{ position: "absolute", top: 10, left: 70, zIndex: 1, width: 50 }} inverted color='teal' icon='trash alternate' onClick={() => deleteRecipe()} />
+            </>}
             <Image wrapped src={recipe.Img} size="large" className="recipe-img" />
             <CardContent>
                 <CardHeader >{recipe.Name}</CardHeader>

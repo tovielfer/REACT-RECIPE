@@ -2,6 +2,7 @@
 
 const initialState = {
     user: null,
+    recipes:[],
     currentRecipe: null
 }
 const Reducer = (state = initialState, action) => {
@@ -10,6 +11,9 @@ const Reducer = (state = initialState, action) => {
         case "SET_USER": {
             return { ...state, user: action.payload }
         } // V V V
+        case "GET_RECIPES": {
+            return {  ...state, recipes: action.payload  }
+        }
         // case "SET_RECIPE":
         //     return { ...state, recipes: action.data }
         // case "ADD_RECIPE":
