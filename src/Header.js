@@ -28,14 +28,9 @@ const Home = ({ page }) => {
                         <Icon name="shopping basket" size='large' color="teal" style={{ marginLeft: "10px" }} />רשימת קניות
                     </Menu.Item>
                 </Link>
-                <Link to="/addRecipe">
+                <Link to="/recipe/add">
                     <Menu.Item active={page === 'הוספת מתכון'}  >
                         <Icon name="plus" size='large' color="teal" style={{ marginLeft: "10px" }} /> הוספת מתכון
-                    </Menu.Item>
-                </Link>
-                <Link to="/addCategory">
-                    <Menu.Item active={page === 'הוספת קטגוריה'}  >
-                        <Icon name="plus" size='large' color="teal" style={{ marginLeft: "10px" }} />  הוספת קטגוריה
                     </Menu.Item>
                 </Link>
                 <Link to="/">

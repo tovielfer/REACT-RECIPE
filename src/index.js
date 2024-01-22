@@ -7,7 +7,7 @@ import 'semantic-ui-css/semantic.min.css'
 import { BrowserRouter } from 'react-router-dom'
 import 'react-hook-form'
 import { Provider } from 'react-redux';
-import store from './Store/Store';
+import store from './Store/index';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
