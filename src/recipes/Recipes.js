@@ -1,4 +1,4 @@
-import Header from '../Header';
+import Header from '../pages/Header';
 import { CardGroup, Segment, Dropdown, Input } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
@@ -53,7 +53,7 @@ const Recipes = () => {
             <Header page={pathname == '/userrecipes' ? 'המתכונים שלי' : 'מתכונים'} />
             <Segment color='black' inverted style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                 <Dropdown onChange={handleCategoryChange} placeholder='קטגוריה' search selection value={selectedCategory} noResultsMessage='לא נמצאה קטגוריה מתאימה' options={categoryOptions} />
-                <Input onChange={handleDurationChange} type='number'></Input>
+                <Input onChange={handleDurationChange} type='number'   placeholder='משך זמן מקסימלי בדקות'></Input>
                 <Dropdown onChange={handleDifficultyChange} placeholder='דרגת קושי' selection value={selectedDifficulty} options={difficultyOptions} />
             </Segment>
 
